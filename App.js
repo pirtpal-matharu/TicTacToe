@@ -7,11 +7,13 @@ const TicTacToeScreen = () => {
 	const [board, setBoard] = useState(Array(9).fill(null));
 	const [currentPlayer, setCurrentPlayer] = useState('X');
 	const [isWinner, setIsWinner] = useState(null);
+	const [pageLoader, setPageLoader] = useState(true);
 	const [winnerScreenAnim] = useState(new Animated.Value(0));
 
 	useEffect(() => {
-		// setIsWinner('X')
-		// animateWinnerScreen();
+		setTimeout(() => {
+			setPageLoader(false)
+		}, 3000);
 		resetGame();
 	}, []);
 
@@ -80,6 +82,20 @@ const TicTacToeScreen = () => {
 		}).start();
 	};
 
+
+	if (pageLoader) {
+		return (
+			<View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+				<LottieView
+					source={require("./assets/json/67313-lava-preloader.json")}
+					style={{
+						width: 100,
+						height: 100,
+					}}
+					autoPlay/>
+			</View>
+		);
+	}
 
   return (
     <View style={styles.container}>
