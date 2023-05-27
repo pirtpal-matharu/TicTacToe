@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Animated, Easing } from 'react-native';
 import * as Animatable from 'react-native-animatable';
+import LottieView from 'lottie-react-native';
 
 const TicTacToeScreen = () => {
 	const [board, setBoard] = useState(Array(9).fill(null));
@@ -9,6 +10,8 @@ const TicTacToeScreen = () => {
 	const [winnerScreenAnim] = useState(new Animated.Value(0));
 
 	useEffect(() => {
+		// setIsWinner('X')
+		// animateWinnerScreen();
 		resetGame();
 	}, []);
 
@@ -31,12 +34,10 @@ const TicTacToeScreen = () => {
 			];
 			const indices = newBoard.map((element, index) => (element === currentPlayer ? index : null)).filter((index) => index !== null);
 			const isMatched = winningCombinations.some(combination => combination.every(index => indices.includes(index)));
-			console.log({ indices, isMatched });
-			if (isMatched) {
-				setIsWinner(currentPlayer)
+			const nonNullCount = newBoard.filter((value) => value !== null).length;
+			if (isMatched || nonNullCount == 9) {
+				setIsWinner(nonNullCount == 9 ? 'draw' : currentPlayer)
 				animateWinnerScreen();
-
-				alert(`${currentPlayer} Winner.`)
 				return currentPlayer
 			}
     }
@@ -68,28 +69,13 @@ const TicTacToeScreen = () => {
 		setCurrentPlayer('X');
 		setIsWinner(null);
 		winnerScreenAnim.setValue(0);
-	};
-
-	const winnerScreenStyles = [
-		styles.winnerScreen,
-		{
-			transform: [
-				{
-					translateY: winnerScreenAnim.interpolate({
-						inputRange: [0, 1],
-						outputRange: [500, 0], // Adjust the values as needed
-					}),
-				},
-			],
-			opacity: winnerScreenAnim,
-		},
-	];
+	}; 
 
 	const animateWinnerScreen = () => { 
 		Animated.timing(winnerScreenAnim, {
 			toValue: 1,
 			duration: 1000,
-			easing: Easing.ease,
+			easing: Easing.bounce,
 			useNativeDriver: true,
 		}).start();
 	};
@@ -99,16 +85,31 @@ const TicTacToeScreen = () => {
     <View style={styles.container}>
       <Text style={styles.header}>Tic Tac Toe</Text>
 			<View style={styles.board}>{renderBoard()}</View>
+			
 
 			{
-				isWinner && (
-					<Animated.View style={winnerScreenStyles}>
-						<Text style={styles.winnerText}>{isWinner === 'draw' ? "It's a Draw!" : `Winner: ${isWinner}`}</Text>
+				isWinner ? 
+					<Animated.View style={[styles.winnerScreen, {
+						transform: [{
+							translateY: winnerScreenAnim.interpolate({
+								inputRange: [0, 1],
+								outputRange: [100, 0],
+							})
+						}]
+					}]}>
+						<LottieView
+							loop
+							autoPlay
+							style={styles.waterFlowAnimation}
+							source={require('./assets/json/waterFlow.json')}
+						/>
+						<Text style={styles.winnerText}>{isWinner === 'draw' ? "It's a Draw!" : `Congratulations! ${isWinner} Win!`}</Text>
 						<TouchableOpacity style={styles.resetButton} onPress={resetGame}>
-							<Text style={styles.resetButtonText}>Reset</Text>
+							<Text style={styles.resetButtonText}>Play Again</Text>
 						</TouchableOpacity>
 					</Animated.View>
-				)
+				:
+					<Text style={[styles.winnerText,{marginTop:20}]}>{currentPlayer} Is Turn</Text>
 			}
     </View>
   );
@@ -150,6 +151,7 @@ const styles = StyleSheet.create({
 	},
 	resetButton: {
 		marginTop: 20,
+		marginBottom: 60,
 		paddingHorizontal: 16,
 		paddingVertical: 8,
 		backgroundColor: '#000',
@@ -165,15 +167,20 @@ const styles = StyleSheet.create({
 		bottom: 0,
 		left: 0,
 		right: 0,
-		height: '100%',
-		backgroundColor: '#333',
 		alignItems: 'center',
-		justifyContent: 'center',
+		paddingBottom: 40,
+		backgroundColor: '#fff9',
+		borderTopLeftRadius: 20,
+		borderTopRightRadius: 20,
+		elevation: 5,
+	},
+	waterFlowAnimation: {
+		width: 200,
+		height: 400,
 	},
 	winnerText: {
 		fontSize: 24,
-		fontWeight: 'bold',
-		color: 'red',
+		fontWeight: 'bold', 
 	},
 });
 
