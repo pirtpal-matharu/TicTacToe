@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Animated, Easing } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 
 const TicTacToeScreen = () => {
 	const [board, setBoard] = useState(Array(9).fill(null));
 	const [currentPlayer, setCurrentPlayer] = useState('X');
 	const [isWinner, setIsWinner] = useState(null);
+	const [winnerScreenAnim] = useState(new Animated.Value(0));
 
 	useEffect(() => {
 		resetGame();
@@ -33,6 +34,8 @@ const TicTacToeScreen = () => {
 			console.log({ indices, isMatched });
 			if (isMatched) {
 				setIsWinner(currentPlayer)
+				animateWinnerScreen();
+
 				alert(`${currentPlayer} Winner.`)
 				return currentPlayer
 			}
@@ -64,15 +67,49 @@ const TicTacToeScreen = () => {
 		setBoard(Array(9).fill(null));
 		setCurrentPlayer('X');
 		setIsWinner(null);
+		winnerScreenAnim.setValue(0);
 	};
+
+	const winnerScreenStyles = [
+		styles.winnerScreen,
+		{
+			transform: [
+				{
+					translateY: winnerScreenAnim.interpolate({
+						inputRange: [0, 1],
+						outputRange: [500, 0], // Adjust the values as needed
+					}),
+				},
+			],
+			opacity: winnerScreenAnim,
+		},
+	];
+
+	const animateWinnerScreen = () => { 
+		Animated.timing(winnerScreenAnim, {
+			toValue: 1,
+			duration: 1000,
+			easing: Easing.ease,
+			useNativeDriver: true,
+		}).start();
+	};
+
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Tic Tac Toe</Text>
 			<View style={styles.board}>{renderBoard()}</View>
-			<TouchableOpacity style={styles.resetButton} onPress={resetGame}>
-				<Text style={styles.resetButtonText}>Reset</Text>
-			</TouchableOpacity>
+
+			{
+				isWinner && (
+					<Animated.View style={winnerScreenStyles}>
+						<Text style={styles.winnerText}>{isWinner === 'draw' ? "It's a Draw!" : `Winner: ${isWinner}`}</Text>
+						<TouchableOpacity style={styles.resetButton} onPress={resetGame}>
+							<Text style={styles.resetButtonText}>Reset</Text>
+						</TouchableOpacity>
+					</Animated.View>
+				)
+			}
     </View>
   );
 };
@@ -115,13 +152,28 @@ const styles = StyleSheet.create({
 		marginTop: 20,
 		paddingHorizontal: 16,
 		paddingVertical: 8,
-		backgroundColor: '#333',
+		backgroundColor: '#000',
 		borderRadius: 4,
 	},
 	resetButtonText: {
 		fontSize: 18,
 		fontWeight: 'bold',
 		color: 'white',
+	},
+	winnerScreen: {
+		position: 'absolute',
+		bottom: 0,
+		left: 0,
+		right: 0,
+		height: '100%',
+		backgroundColor: '#333',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	winnerText: {
+		fontSize: 24,
+		fontWeight: 'bold',
+		color: 'red',
 	},
 });
 
