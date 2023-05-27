@@ -41,14 +41,12 @@ const TicTacToeScreen = () => {
 
   const renderSquare = (index) => {
     return (
-      <TouchableOpacity
+			<TouchableOpacity
+				key={index}
         style={styles.square}
         onPress={() => handleSquarePress(index)}
-				disabled={board[index] !== null || isWinner}
-        key={index}>
-        {board[index] && (
-					<Animatable.Text animation="jello"  style={styles.squareText}>{board[index]}</Animatable.Text>
-        )}
+				disabled={board[index] !== null || isWinner}>
+        {board[index] && (<Animatable.Text animation="jello"  style={styles.squareText}>{board[index]}</Animatable.Text>)}
       </TouchableOpacity>
     );
   };

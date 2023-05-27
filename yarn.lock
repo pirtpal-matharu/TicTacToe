@@ -5555,6 +5555,13 @@ react-native-gradle-plugin@^0.0.6:
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.0.6.tgz#b61a9234ad2f61430937911003cddd7e15c72b45"
   integrity sha512-eIlgtsmDp1jLC24dRn43hB3kEcZVqx6DUQbR0N1ABXGnMEafm9I3V3dUUeD1vh+Dy5WqijSoEwLNUPLgu5zDMg==
 
+react-native-particles@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/react-native-particles/-/react-native-particles-0.0.8.tgz#332a3ee1aa540c35845650fd6d7e5ff8ce6054bc"
+  integrity sha512-N24j7oFX/myRrriZRigl9XeF3rfCY1NQ9wTpaIgSgbQpDxPrVuoO2NOuTYrXSyi41jpXEg7fN64HpkI8MQXrYg==
+  dependencies:
+    lodash.debounce "^4.0.8"
+
 react-native@0.68.2:
   version "0.68.2"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.68.2.tgz#07547cd31bb9335a7fa4135cfbdc24e067142585"
