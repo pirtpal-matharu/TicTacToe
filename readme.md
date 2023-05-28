@@ -41,6 +41,11 @@ A simple implementation of the Tic Tac Toe game in React Native.
 
 ![Game Board](./screenshots/game_board.png)
 
+## Video
+
+![Game Board](./screenshots/game_board.gif)
+
+
 ## Technologies Used
 
 - React Native
