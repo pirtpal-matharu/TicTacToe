@@ -12,7 +12,7 @@ A simple implementation of the Tic Tac Toe game in React Native.
 
 ## Installation
 
-1. Clone the repository: `git clone https://github.com/pirtpal-matharu/TicTacToe.git`
+1. Clone the repository: `git clone https://github.com/pirtpal-matharu/Tic-Tac-Toe-Zero-Kata-ReactNative.git`
 
 2. Navigate to the project directory: `cd tic-tac-toe`
 
